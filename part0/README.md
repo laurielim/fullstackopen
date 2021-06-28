@@ -71,3 +71,23 @@ browser executes the event handler
 that renders notes to display
 end note
 ```
+
+## 0.6: New note
+
+![sequence diagram for new note of single page app](./sequence_diagram-spa_new_note.png)
+
+```
+actor user
+user->browser: user writes into text field
+user->browser: click submit
+
+note over browser:
+add new note to array of notes
+reset text field to an empty string
+end note
+
+browser->user: display notes
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: {"message":"note created"}
+```
