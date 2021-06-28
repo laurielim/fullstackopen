@@ -7,9 +7,9 @@ The diagrams were made using [websequencediagrams](https://www.websequencediagra
 ![sequence diagram for new note](./sequence_diagram-new_note.png)
 
 ```
-note over browser:
-user writes into text field and click submit
-end note
+actor user
+user->browser: user writes into text field
+user->browser: click submit
 
 browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_notes
 server-->browser: Accept response
@@ -19,7 +19,8 @@ browser refreshes and fetches files
 from the server again
 end note
 
-browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
 server-->browser: HTML-code
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
 server-->browser: main.css
@@ -40,4 +41,8 @@ browser executes the event handler
 that renders notes to display,
 including the new note
 end note
+
+browser->user: display notes
 ```
+
+## 0.5: Single page app
