@@ -1,7 +1,11 @@
 import React from "react";
 
 const Statistic = ({text, value}) => {
-    return <li>{text} {value}</li>; 
+    return <tr>
+        <td>{text}</td> 
+        <td>{value}</td>
+        </tr>
+    ; 
 }
 
 export default Statistic;
