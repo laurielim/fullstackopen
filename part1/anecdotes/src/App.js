@@ -12,6 +12,7 @@ const App = () => {
   ]
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))  
   const [selected, setSelected] = useState(0)
+  const [popular, setPopular] = useState(0)
 
   const getAnecdote = () => {
     let randomIndex;
@@ -25,15 +26,25 @@ const App = () => {
     const copy = [...votes];
     copy[selected]++;
     setVotes(copy);
+    if (copy[selected] > votes[popular]) setPopular(selected);
   }
 
   return (
-    <div>
+    <main>
+      <h1>Anecdotes</h1>
+    <section>
+      <h2>Anecdote of the day</h2>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={updateVotes}>Vote</button>
       <button onClick={getAnecdote}>Next anecdote</button>
-    </div>
+    </section>
+    <section>
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[popular]}</p>
+      <p>has {votes[popular]} votes</p>
+    </section>
+    </main>
   )
 }
 
