@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import './App.css';
 import Statistics from './components/Statistics';
+import Button from './components/Button';
 
 const App = () => {
   // save clicks of each button to its own state
@@ -20,9 +21,9 @@ const App = () => {
     <h1>UniCafe Feedback</h1>
     <section>
       <h2>Give feedback</h2>
-      <button onClick={()=>update(good, setGood)}>good</button>
-      <button onClick={()=>update(neutral, setNeutral)}>neutral</button>
-      <button onClick={()=>update(bad, setBad)}>bad</button>
+      <Button update={update} text={"good"} state={good} setFn={setGood}/>
+      <Button update={update} text={"neutral"} state={neutral} setFn={setNeutral}/>
+      <Button update={update} text={"bad"} state={bad} setFn={setBad}/>
     </section>
     <Statistics good={good} neutral={neutral} bad={bad} all={all} />
       

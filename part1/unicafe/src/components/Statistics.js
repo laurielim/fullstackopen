@@ -17,8 +17,6 @@ const stats = () => (
       <h2>Statistics</h2>
       {all ? stats() : <p>No feedbback give</p>}
     </section>)
-
-
   }
 
   export default Statistics
