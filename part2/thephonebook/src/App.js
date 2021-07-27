@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas',
-    number: '040-1234567'
-   }
-  ]) 
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+  ])
+  
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
 
@@ -14,34 +16,37 @@ const App = () => {
 
   const addName = (e) => {
     e.preventDefault()
-
     if (persons.filter(person => person.name === newName).length > 0) {
       alert(`${newName} is already added to phonebook`)
       return;
     }
-
     setPersons([...persons, {name: newName, number: newNumber}])
     setNewName('')
     setNewNumber('')
   }
 
+  const [ searchInput, setSearchInput ] = useState('')
+  const handleSearch = (e) => setSearchInput(e.target.value)
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      filter shown with <input type="text" value={searchInput} onChange={handleSearch}/>
+      <h2>Add new contact</h2>
       <form>
         <div>
-          name: <input value={newName} onChange={handleNameChange} />
+          name: <input type="text" value={newName} onChange={handleNameChange} />
         </div>
         <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
+          number: <input type="text" value={newNumber} onChange={handleNumberChange}/>
         </div>
         <div>
           <button onClick={addName} type="submit">add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
+      <h2>Contacts</h2>
       <ul>
-        {persons.map(person=><li key={person.name}>{person.name} {person.number}</li>)}
+        {persons.filter(person=>person.name.toLowerCase().includes(searchInput.toLowerCase())).map(person=><li key={person.name}>{person.name} {person.number}</li>)}
       </ul>
     </div>
   )
