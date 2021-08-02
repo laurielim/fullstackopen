@@ -22,6 +22,10 @@ const App = () => {
   )
 
   const [searchInput, setSearchInput] = useState("");
+  
+  const showCountry = (countryName) => {
+    setSearchInput(countryName)
+  }
 
   return (
     <main>
@@ -29,7 +33,7 @@ const App = () => {
       <label htmlFor="searchBar">Find countries </label>
       <input type="text" name="searchBar" id="searchBar" onChange={(e)=>setSearchInput(e.target.value)}/>
       </div>
-      <SearchResult searchInput={searchInput} countries={countries}/>
+      <SearchResult searchInput={searchInput} countries={countries} showCountry={showCountry}/>
     </main>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchResult = ({searchInput, countries}) => {
+const SearchResult = ({searchInput, countries, showCountry}) => {
     let matchingCountries = countries.filter(country => country.name.toLowerCase().includes(searchInput.toLowerCase()));
 
     if (matchingCountries.length > 10) {
@@ -21,7 +21,7 @@ const SearchResult = ({searchInput, countries}) => {
           </div>
         )
     } else {
-      return matchingCountries.map(country=><p>{country.name}</p>)
+      return matchingCountries.map(country=><p>{country.name} <button onClick={()=>showCountry(country.name)} aria-label="Show country details">Show</button></p>)
     }
   }
 
