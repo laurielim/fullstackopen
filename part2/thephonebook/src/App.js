@@ -4,7 +4,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
-import { getAll, createContact } from './services/personService';
+import { getAll, createContact, deleteContact } from './services/personService';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -38,12 +38,21 @@ const App = () => {
   }
 
   const [ searchInput, setSearchInput ] = useState('')
-  const handleSearch = (e) => setSearchInput(e.target.value)
+  const searchHandler = (e) => setSearchInput(e.target.value)
+
+  const deleteHanlder = (contact, id) => {
+    const result = window.confirm(`Delete ${contact}`);
+    if (result) {
+      deleteContact(id)
+      const updatedPersons = persons.filter(person => person.id !== id)
+      setPersons(updatedPersons)
+    }
+  }
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <Filter searchInput={searchInput} handleSearch={handleSearch}/>
+      <Filter searchInput={searchInput} searchHandler={searchHandler}/>
       <h2>Add new contact</h2>
       <PersonForm
       newName={newName}
@@ -53,7 +62,7 @@ const App = () => {
       addContact={addContact}
       />
       <h2>Contacts</h2>
-      <Persons persons={persons} searchInput={searchInput}/>
+      <Persons persons={persons} searchInput={searchInput} deleteHanlder={deleteHanlder}/>
     </div>
   )
 }

@@ -14,4 +14,10 @@ const createContact = newContact => {
 
 }
 
-export { getAll, createContact }
+const deleteContact = id => {
+    return axios
+        .delete(`${baseUrl}/${id}`)
+        .catch(e => console.log(e))
+}
+
+export { getAll, createContact, deleteContact }
