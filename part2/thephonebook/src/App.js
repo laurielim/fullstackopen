@@ -26,13 +26,19 @@ const App = () => {
   const handleNameChange = (e) => setNewName(e.target.value)
   const handleNumberChange = (e) => setNewNumber(e.target.value)
 
-  const addName = (e) => {
+  const addContact = (e) => {
     e.preventDefault()
     if (persons.filter(person => person.name === newName).length > 0) {
       alert(`${newName} is already added to phonebook`)
       return;
     }
-    setPersons([...persons, {name: newName, number: newNumber}])
+    const newContact = {name: newName, number: newNumber}
+
+    axios
+        .post('http://localhost:3001/persons', newContact)
+        .then(res => setPersons([...persons, res.data]))
+        .catch(e => console.log('something wen wrong', e))
+
     setNewName('')
     setNewNumber('')
   }
@@ -50,7 +56,7 @@ const App = () => {
       handleNameChange={handleNameChange}
       newNumber={newNumber}
       handleNumberChange={handleNumberChange}
-      addName={addName}
+      addContact={addContact}
       />
       <h2>Contacts</h2>
       <Persons persons={persons} searchInput={searchInput}/>
