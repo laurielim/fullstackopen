@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
 
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
+import { getAll, createContact } from './services/personService';
+
 const App = () => {
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const res = await axios.get('http://localhost:3001/persons');
-      setPersons(res.data)
-    } catch (e) {
-      console.log(e)
-    }   
-  }
-  fetchData();
+  getAll()
+      .then(res => setPersons(res))
+      .catch(e => console.log(e))
   }, [])
 
   const [ newName, setNewName ] = useState('')
@@ -34,10 +29,9 @@ const App = () => {
     }
     const newContact = {name: newName, number: newNumber}
 
-    axios
-        .post('http://localhost:3001/persons', newContact)
-        .then(res => setPersons([...persons, res.data]))
-        .catch(e => console.log('something wen wrong', e))
+    createContact(newContact)
+      .then(res => setPersons([...persons, res]))
+      .catch(e => console.log(e))
 
     setNewName('')
     setNewNumber('')
