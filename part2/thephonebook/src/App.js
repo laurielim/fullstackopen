@@ -3,12 +3,22 @@ import React, { useState, useEffect } from 'react';
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from './components/Notification';
 
 import { getAll, createContact, deleteContact, updateContact } from './services/personService';
 
 const App = () => {
   const [persons, setPersons] = useState([])
+  const [notificationMessage, setNotificationMessage] = useState("")
+  const [notificationStatus, setNotificationStatus] = useState("")
 
+  const hideNotification = () => {
+    setTimeout(() => {
+      setNotificationMessage("");
+      setNotificationStatus("");
+    }, 5000)
+  }
+  
   useEffect(() => {
   getAll()
       .then(res => setPersons(res))
@@ -21,7 +31,7 @@ const App = () => {
   const handleNameChange = (e) => setNewName(e.target.value)
   const handleNumberChange = (e) => setNewNumber(e.target.value)
 
-  const addContact = (e, id) => {
+  const addContact = (e) => {
     e.preventDefault()
     const newContact = {name: newName, number: newNumber}
     const existingContact = persons.filter(person => person.name === newName)
@@ -33,16 +43,20 @@ const App = () => {
       .then(res => {
         const updatedPersons = persons.map(person => person.id === existingContact[0].id ? res : person)
         setPersons(updatedPersons)
+        setNotificationMessage(`Updated ${newName}`)
       })
       }
     } else {
       createContact(newContact)
-      .then(res => setPersons([...persons, res]))
+      .then(res => {
+        setPersons([...persons, res])
+        setNotificationMessage(`Added ${newName}`)
+      })
     }
-    
-
+    setNotificationStatus("success")
     setNewName('')
     setNewNumber('')
+    hideNotification()
   }
 
   const [ searchInput, setSearchInput ] = useState('')
@@ -60,6 +74,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      {notificationStatus && <Notification message={notificationMessage} status={notificationStatus}/>}
       <Filter searchInput={searchInput} searchHandler={searchHandler}/>
       <h2>Add new contact</h2>
       <PersonForm
