@@ -4,7 +4,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 
-import { getAll, createContact, deleteContact } from './services/personService';
+import { getAll, createContact, deleteContact, updateContact } from './services/personService';
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -21,17 +21,25 @@ const App = () => {
   const handleNameChange = (e) => setNewName(e.target.value)
   const handleNumberChange = (e) => setNewNumber(e.target.value)
 
-  const addContact = (e) => {
+  const addContact = (e, id) => {
     e.preventDefault()
-    if (persons.filter(person => person.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`)
-      return;
-    }
     const newContact = {name: newName, number: newNumber}
+    const existingContact = persons.filter(person => person.name === newName)
 
-    createContact(newContact)
+    if (existingContact.length > 0) {
+      const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
+      if (result) {
+        updateContact(existingContact[0].id, newContact)
+      .then(res => {
+        const updatedPersons = persons.map(person => person.id === existingContact[0].id ? res : person)
+        setPersons(updatedPersons)
+      })
+      }
+    } else {
+      createContact(newContact)
       .then(res => setPersons([...persons, res]))
-      .catch(e => console.log(e))
+    }
+    
 
     setNewName('')
     setNewNumber('')
