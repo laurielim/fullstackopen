@@ -45,7 +45,14 @@ const App = () => {
         setPersons(updatedPersons)
         setNotificationMessage(`Updated ${newName}`)
       })
-      }
+      .catch(() => {
+        setNotificationMessage(`${newName} is no longer in the phonebook`)
+        setNotificationStatus("error")
+        const updatedPersons = persons.filter(person => person.name !== newName)
+        setPersons(updatedPersons)
+        hideNotification()
+      })
+    }
     } else {
       createContact(newContact)
       .then(res => {
@@ -66,8 +73,14 @@ const App = () => {
     const result = window.confirm(`Delete ${contact}`);
     if (result) {
       deleteContact(id)
-      const updatedPersons = persons.filter(person => person.id !== id)
-      setPersons(updatedPersons)
+        .catch(() => {
+          setNotificationMessage(`${contact} has already been removed`)
+          setNotificationStatus("error")
+          hideNotification()
+        }
+        )
+        const updatedPersons = persons.filter(person => person.id !== id)
+        setPersons(updatedPersons)
     }
   }
 

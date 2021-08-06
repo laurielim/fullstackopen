@@ -19,14 +19,12 @@ const createContact = newContact => {
 const deleteContact = id => {
     return axios
         .delete(`${baseUrl}/${id}`)
-        .catch(e => console.log(e))
 }
 
 const updateContact = (id, newContact) => {
     return axios
         .put(`${baseUrl}/${id}`, newContact)
         .then(res => res.data)
-        .catch(e => console.log(e))
 
 }
 
