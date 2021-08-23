@@ -1,6 +1,8 @@
 const express = require("express"); // Similar to import in React
 const app = express();
 
+app.use(express.json());
+
 let persons = [
 	{
 		id: 1,
@@ -36,6 +38,18 @@ app.get("/info", (req, res) => {
 
 app.get("/api/persons", (req, res) => {
 	res.json(persons);
+});
+
+app.post("/api/persons", (req, res) => {
+	if (!Object.keys(req.body).length) {
+		res.status(400).json({
+			error: "Content missing",
+		});
+	}
+
+	const newContact = { ...req.body, id: new Date() };
+	persons = persons.concat(newContact);
+	res.json(newContact);
 });
 
 app.get("/api/persons/:id", (req, res) => {
