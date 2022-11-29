@@ -64,7 +64,14 @@ app.post("/api/persons", (req, res) => {
 		});
 	}
 
-	const newContact = { ...req.body, id: new Date() };
+  let newId = Math.floor(Math.random() * 100);
+	const existingIds = persons.map((person) => person.id);
+
+	while (existingIds.includes(newId)) {
+    newId = Math.floor(Math.random() * 100);
+	}
+
+	const newContact = { ...req.body, id: newId };
 	persons = persons.concat(newContact);
 	res.json(newContact);
 });
