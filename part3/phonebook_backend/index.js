@@ -69,22 +69,20 @@ app.post("/api/persons", (req, res) => {
 		});
 	}
 
-	if (persons.map((person) => person.name).includes(req.body.name)) {
+/* 	if (persons.map((person) => person.name).includes(req.body.name)) {
 		return res.status(400).json({
 			error: "Name must be unique",
 		});
-	}
+	} */
 
-  let newId = Math.floor(Math.random() * 100);
-	const existingIds = persons.map((person) => person.id);
-
-	while (existingIds.includes(newId)) {
-    newId = Math.floor(Math.random() * 100);
-	}
-
-	const newContact = { ...req.body, id: newId };
-	persons = persons.concat(newContact);
-	res.json(newContact);
+	const newContact = { ...req.body };
+ 	const contact = new Contact({
+		name: newContact.name,
+		phoneNumber: newContact.number,
+	})
+		contact.save().then(savedContact => {
+			res.json(savedContact);
+	})
 });
 
 app.get("/api/persons/:id", (req, res) => {
