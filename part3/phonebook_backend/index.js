@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require("express"); // Similar to import in React
 const morgan = require("morgan");
 const cors = require('cors')
+const Contact = require('./models/contact')
 
 const app = express();
 
