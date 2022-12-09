@@ -1,5 +1,7 @@
 const express = require("express"); // Similar to import in React
 const morgan = require("morgan");
+const cors = require('cors')
+
 const app = express();
 
 app.use(express.json());
@@ -12,7 +14,9 @@ morgan.token("content", (req, res) => {
 
 app.use(
 	morgan(":method :url :status :res[content-length] :response-time ms :content")
-);
+	);
+
+app.use(cors());
 
 let persons = [
 	{
