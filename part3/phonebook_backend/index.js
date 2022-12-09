@@ -76,10 +76,7 @@ app.post("/api/persons", (req, res) => {
 	} */
 
 	const newContact = { ...req.body };
- 	const contact = new Contact({
-		name: newContact.name,
-		phoneNumber: newContact.number,
-	})
+ 	const contact = new Contact({...req.body})
 		contact.save().then(savedContact => {
 			res.json(savedContact);
 	})

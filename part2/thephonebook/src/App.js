@@ -18,7 +18,7 @@ const App = () => {
       setNotificationStatus("");
     }, 5000)
   }
-  
+
   useEffect(() => {
   getAll()
       .then(res => setPersons(res))
@@ -33,7 +33,7 @@ const App = () => {
 
   const addContact = (e) => {
     e.preventDefault()
-    const newContact = {name: newName, number: newNumber}
+    const newContact = {name: newName, phoneNumber: newNumber}
     const existingContact = persons.filter(person => person.name === newName)
 
     if (existingContact.length > 0) {
