@@ -49,13 +49,17 @@ app.get("/", (req, res) => {
 });
 
 app.get("/info", (req, res) => {
-	res.send(
-		`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`
-	);
+	Contact.find({}).then(contacts => {
+		res.send(
+			`<p>Phonebook has info for ${contacts.length} people</p><p>${new Date()}</p>`
+		);
+	})
 });
 
 app.get("/api/persons", (req, res) => {
-	res.json(persons);
+	Contact.find({}).then(contacts => {
+		res.json(contacts);
+	})
 });
 
 app.post("/api/persons", (req, res) => {
@@ -84,10 +88,16 @@ app.post("/api/persons", (req, res) => {
 });
 
 app.get("/api/persons/:id", (req, res) => {
-	const id = Number(req.params.id);
-	const person = persons.find((person) => person.id === id);
-	if (!person) return res.status(404).end();
-	res.json(person);
+	Contact
+	  .findById(req.params.id)
+		.then(contact => {
+		  if (!contact) return res.status(404).end();
+      res.json(contact)
+    })
+		.catch(error => {
+      console.log(error);
+      res.status(500).end();
+    })
 });
 
 app.delete("/api/persons/:id", (req, res) => {

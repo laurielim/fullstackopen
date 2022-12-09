@@ -28,7 +28,7 @@ contactSchema.set('toJSON', {
 
 const closeMongooseConnection = () => {
   mongoose.connection.close(() => {
-    console.log('Mongoose connection closed on app termination');
+    console.log('Connection to MongoDB closed on app termination');
     process.exit(0);
   });
 }
