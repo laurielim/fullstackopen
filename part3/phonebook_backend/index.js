@@ -46,12 +46,6 @@ app.post("/api/persons", (req, res) => {
 		});
 	}
 
-/* 	if (persons.map((person) => person.name).includes(req.body.name)) {
-		return res.status(400).json({
-			error: "Name must be unique",
-		});
-	} */
-
 	const newContact = { ...req.body };
  	const contact = new Contact({...req.body})
 	contact.save().then(savedContact => {
@@ -74,6 +68,16 @@ app.delete("/api/persons/:id", (req, res, next) => {
 	  .findByIdAndRemove(req.params.id)
     .then(result => {
       res.status(204).end()
+    })
+    .catch(error => next(error))
+})
+
+app.put("/api/persons/:id", (req, res, next) => {
+  const contact = { ...req.body }
+	Contact
+	  .findByIdAndUpdate(req.params.id, contact, { new: true })
+    .then(updatedContact => {
+      res.json(updatedContact)
     })
     .catch(error => next(error))
 })
