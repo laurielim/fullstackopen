@@ -59,29 +59,23 @@ app.post("/api/persons", (req, res) => {
 	})
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
 	Contact
 	  .findById(req.params.id)
 		.then(contact => {
 		  if (!contact) return res.status(404).end();
       res.json(contact)
     })
-		.catch(error => {
-      console.log(error);
-      res.status(400).send({ error: "Malformatted id" })
-    })
+		.catch(error => next(error))
 });
 
-app.delete("/api/persons/:id", (req, res) => {
+app.delete("/api/persons/:id", (req, res, next) => {
 	Contact
 	  .findByIdAndRemove(req.params.id)
     .then(result => {
       res.status(204).end()
     })
-    .catch(error => {
-			console.log(error);
-      res.status(400).send({ error: "Couldn't delete contact" })
-		})
+    .catch(error => next(error))
 })
 
 const PORT = process.env.PORT || 3001;
@@ -93,4 +87,19 @@ const unknownEndpoint = (req, res) => {
 	res.status(404).send({ error: "Unknown endpoint" });
 };
 
+// Handler of requests with unknown endpoint.
 app.use(unknownEndpoint);
+
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message)
+
+	if (error.name === "CastError") {
+    return res.status(400).send({ error: "Malformatted id" })
+  }
+
+  next(error)
+}
+
+// Handler of requests with result to errors.
+// This has to be the last loaded middleware.
+app.use(errorHandler)
