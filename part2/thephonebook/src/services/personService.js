@@ -12,7 +12,7 @@ const createContact = newContact => {
     return axios
         .post(baseUrl, newContact)
         .then(res => res.data)
-        .catch(e => console.log(e))
+        .catch(e => e.response.data)
 
 }
 

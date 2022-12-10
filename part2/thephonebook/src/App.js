@@ -56,8 +56,14 @@ const App = () => {
     } else {
       createContact(newContact)
       .then(res => {
-        setPersons([...persons, res])
-        setNotificationMessage(`Added ${newName}`)
+        if (res.error) {
+          setNotificationMessage(res.error)
+          setNotificationStatus("error")
+          hideNotification();
+        } else {
+          setPersons([...persons, res])
+          setNotificationMessage(`Added ${newName}`)
+        }
       })
     }
     setNotificationStatus("success")
