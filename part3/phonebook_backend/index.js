@@ -39,18 +39,17 @@ app.get("/api/persons", (req, res) => {
 	})
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
 	if (Object.keys(req.body).length < 2) {
 		return res.status(400).json({
 			error: "Content missing",
 		});
 	}
 
-	const newContact = { ...req.body };
  	const contact = new Contact({...req.body})
-	contact.save().then(savedContact => {
-		res.json(savedContact);
-	})
+	contact.save()
+	  .then(savedContact => res.json(savedContact))
+		.catch(error => next(error))
 });
 
 app.get("/api/persons/:id", (req, res, next) => {
@@ -75,7 +74,7 @@ app.delete("/api/persons/:id", (req, res, next) => {
 app.put("/api/persons/:id", (req, res, next) => {
   const contact = { ...req.body }
 	Contact
-	  .findByIdAndUpdate(req.params.id, contact, { new: true })
+	  .findByIdAndUpdate(req.params.id, contact, { new: true, runValidators: true, context: 'query' })
     .then(updatedContact => {
       res.json(updatedContact)
     })
@@ -99,7 +98,9 @@ const errorHandler = (error, req, res, next) => {
 
 	if (error.name === "CastError") {
     return res.status(400).send({ error: "Malformatted id" })
-  }
+  } else if (error.name === "ValidationError") {
+    return res.status(400).json({ error: error.message })
+	}
 
   next(error)
 }
