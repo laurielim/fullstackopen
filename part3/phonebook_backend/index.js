@@ -91,14 +91,20 @@ app.get("/api/persons/:id", (req, res) => {
     })
 		.catch(error => {
       console.log(error);
-      res.status(500).end();
+      res.status(400).send({ error: "Malformatted id" })
     })
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-	const id = Number(req.params.id);
-	persons = persons.filter((person) => person.id !== id);
-	res.status(204).end()
+	Contact
+	  .findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => {
+			console.log(error);
+      res.status(400).send({ error: "Couldn't delete contact" })
+		})
 })
 
 const PORT = process.env.PORT || 3001;
@@ -107,7 +113,7 @@ app.listen(PORT, () => {
 });
 
 const unknownEndpoint = (req, res) => {
-	res.status(404).send({ error: "unknown endpoint" });
+	res.status(404).send({ error: "Unknown endpoint" });
 };
 
 app.use(unknownEndpoint);
